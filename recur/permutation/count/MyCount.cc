@@ -21,15 +21,27 @@ double getCombination(int whole, int part) {
 
 double countPermutations(string str) {
 	const int MAX_ASCII= 127;
-	int *numCounts = new int[MAX_ASCII + 1]; // only support ASCII code
+	const int MAX_ELEMS = 20;
+
+	int *numCounts;
+	int length;
+	int elemsCount;
+	bool bElemDup;
+	double dupElemsPermuCount;
+
+	numCounts = new int[MAX_ASCII + 1]; // only support ASCII code
 	memset(numCounts, 0, sizeof(int) * (MAX_ASCII + 1)); 
-	int length = str.size();
-	double dupElemsPermuCount = 1;
-	bool bElemDup = false;
+
+	length = str.size();
+	if (length > MAX_ELEMS)
+		return -1;
+
+	bElemDup = false;
+	dupElemsPermuCount = 1;
 
 	for (string::iterator it = str.begin(); it != str.end(); ++it) 
 		numCounts[*it]++;
-
+	
 	for (int i = 0; i <= MAX_ASCII; i++) {
 		if (numCounts[i] > 1) {
 			bElemDup = true;
