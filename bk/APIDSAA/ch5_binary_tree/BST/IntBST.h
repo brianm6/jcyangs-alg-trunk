@@ -1,5 +1,5 @@
 // Module Name: IntBST.h
-// Objective: provide the declaration of int binary search tree
+// Objective: provide the declaration and definition of int binary search tree
 // Author: jcyang[at]ymail.com
 // Date: 26.Jan.2010
 #include <iostream>
@@ -97,6 +97,7 @@ public:
 			else
 				return true;
 		}
+		return false;
 	}
 
 	void backOrder() {
