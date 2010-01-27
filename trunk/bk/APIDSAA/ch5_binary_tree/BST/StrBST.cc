@@ -18,7 +18,20 @@ public:
 		else
 			return false;
 	}
+	static bool gt(string s1, string s2) {
+		if (s1 > s2)
+			return true;
+		else
+			return false;
+	}
+	static bool eq(string s1, string s2) {
+		if (s1 == s2)
+			return true;
+		else
+			return false;
+	}
 };
+
 
 int main()
 {
@@ -27,7 +40,9 @@ int main()
 	int length;
 	string *strArr;
 	string fstr;
+	string dstr;
 	int order;
+	string minElem;
 
 	srand(time(NULL));
 
@@ -50,27 +65,26 @@ int main()
 	cout << "+ The initialize string array is : " << endl;
 	for (int i = 0; i < size; i++) 
 		cout << strArr[i] << "   ";
-	cout << endl;
+	cout << endl << endl;
 	
 	BST<string, StrComp> strbst(strArr, size);
 	
 	cout << "find string = ";
 	cin >> fstr;
 	cout << strbst.find(fstr) << endl;
+	cout << endl;
 	
-	cout << "precOrder(0) or midOrder(1) or backOrder(2) = ";
-	cin >> order;
-	switch (order) {
-		case 0:
-			strbst.precOrder();
-			break;
-		case 1:
-			strbst.midOrder();
-			break;
-		case 2:
-			strbst.backOrder();
-			break;
-	}
+	output<string, StrComp>(strbst);
+	cout << "now deleting min" << endl;
+	strbst.deleteMin(minElem);
+	cout << "+ deleted min element : " << minElem << endl;
+	output<string, StrComp>(strbst);
+	cout << endl;
 
+	cout << "delete str = ";
+	cin >> dstr;
+	strbst.deleteElem(dstr);
+	output<string, StrComp>(strbst);
+	cout << endl;
 	return 0;
 }
