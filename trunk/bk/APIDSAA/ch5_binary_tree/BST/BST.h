@@ -110,6 +110,19 @@ public:
 		return false;
 	}
 
+	bool find(const Elem& elem, BinNode<Elem>*& node) {
+		BinNode<Elem>* subroot = root;
+		while (subroot != NULL) {
+			if (EComp::eq(elem, subroot->value)) {
+				node = subroot;
+				return true;
+			} else if (EComp::gt(elem, subroot->value))
+				subroot = subroot->rchild;
+			else
+				subroot = subroot->lchild;
+		}
+		return false;
+	}
 	void deleteMin(Elem& elem) {
 		BinNode<Elem>* subroot = root;
 		BinNode<Elem>* parent = NULL;
@@ -164,7 +177,7 @@ public:
 				}
 			} else if (target->rchild != NULL) {
 				Elem rmin;
-				::deleteMin<string>(target, rmin);
+				::deleteMin<Elem>(target, rmin);
 				target->value = rmin;
 			} else {
 				if (parent == NULL) {
