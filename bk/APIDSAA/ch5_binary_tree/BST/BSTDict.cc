@@ -1,11 +1,11 @@
-// Module Name: BSTDic.cc
+// Module Name: BSTDict.cc
 // Objective: demonstrate the usage of the generic BSTDic implementation
 // Author: jcyang[at]ymail.com
 // Date: 28.Jan.2010
 // Revision: alpha
 
 #include <string>
-#include "BSTDic.h"
+#include "BSTDict.h"
 #include "Comp.h"
 using namespace std;
 
