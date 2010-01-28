@@ -9,7 +9,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
-#include "BSTDic.h"
+#include "BSTDict.h"
 #include "Comp.h"
 #include "Random.h"
 using namespace std;
@@ -22,7 +22,7 @@ int main()
 	int method;
 	int strLen;
 	const int MAX_DICT_SIZE = 256;
-	string searchKey;
+	string sKey, sVal;
 	string addKey, addValue;
 	
 	srand(time(NULL));
@@ -61,8 +61,11 @@ int main()
 	dict.add(addKey, addValue);
 
 	cout << "searching key = ";
-	cin >> searchKey;
-	cout << "+ The companion value = " << dict.get(searchKey) << endl; 
+	cin >> sKey;
+	if (dict.get(sKey, sVal)) 
+		cout << "+ The companion value = " << sVal << endl; 
+	else
+		cout << "+ Could not find the key" << endl;
 
 	return 0;
 }
