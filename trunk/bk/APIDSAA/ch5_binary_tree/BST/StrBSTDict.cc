@@ -33,7 +33,7 @@ int main()
 	valArr = new string[size];
 	cout << endl;
 
-	cout << "manual(0) or random(1) = ";
+	cout << "imput method[manual(0) or random(1)] = ";
 	cin >> method;
 	if (method == 0) {
 		for (int i = 0; i < size; i++) {
@@ -59,6 +59,7 @@ int main()
 	cout << "adding key-value pair = ";
 	cin >> addKey >> addValue;
 	dict.add(addKey, addValue);
+	cout << endl;
 
 	cout << "searching key = ";
 	cin >> sKey;
@@ -69,7 +70,3 @@ int main()
 
 	return 0;
 }
-
-
-
-	
