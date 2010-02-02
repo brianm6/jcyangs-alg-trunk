@@ -7,15 +7,16 @@
 #include <iostream>
 #include "IPriorityQueue.h"
 #include "AList.h"
+#include "SLList.h"
 
 template<class Elem, class Prior>
 class ElemPrior {
 	friend std::ostream& operator<<(std::ostream &out, ElemPrior<Elem, Prior> elemPrior) {
-		out << elemPrior.elem << std::setw(20) << elemPrior.prior << std::endl;
+		out << elemPrior.elem << std::setw(20) << elemPrior.prior;
 		return out;
 	}
 	friend std::ostream& operator<<(std::ostream &out, ElemPrior<Elem, Prior>* elemPrior) {
-		out << elemPrior->elem << std::setw(20) << elemPrior.prior<< std::endl;
+		out << elemPrior->elem << std::setw(20) << elemPrior.prior;
 		return out;
 	}
 public:
@@ -52,7 +53,8 @@ template<class Elem, class Prior, class PComp>
 class SLPriorQueue : public IPriorityQueue<Elem, Prior> {
 private:
 	ElemPrior<Elem, Prior>* elemPriorArr;
-	SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
+	// SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
+	SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
 	int size;
 	int maxsize;
 public:
@@ -66,7 +68,8 @@ public:
 			ElemPrior<Elem, Prior> tmpElemPrior(initElemArr[i], initPriorArr[i]);
 			elemPriorArr[i] = tmpElemPrior;
 		}
-		elemPriorList = new SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size, maxsize);
+		// elemPriorList = new SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size, maxsize);
+		elemPriorList = new SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size);
 	}
 
 	bool insert(const Elem elem, const Prior prior) {
@@ -94,21 +97,14 @@ public:
 		ElemPrior<Elem, Prior> elemPrior;
 		bool isGet;
 
-		isGet = elemPriorList->findMax(elemPrior);
+		isGet = elemPriorList->peekMax(elemPrior);
 		elem = elemPrior.elem;
 
 		return isGet;
 	}
 
 	void show() {
-		ElemPrior<Elem, Prior> elemPrior;
-		
-		std::cout << "size = " << size << std::endl;
-		for (int i = 0; i < size; i++) {
-			elemPrior = elemPriorList->operator[](i);
-			std::cout << elemPrior;
-		}
-		std::cout << std::endl;
+		elemPriorList->show();
 	}
 
 	size_t getSize() {

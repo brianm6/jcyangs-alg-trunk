@@ -3,7 +3,12 @@
 // Author: jcyang[at]ymail.com
 // Date: 30.Jan.2010
 // Revision: Alpha
+
+#ifndef __GENERIC_SORT__
+#define __GENERIC_SORT__
+
 #include <iostream>
+using namespace std;
 
 template<class Elem>
 void mySwap(Elem& e1, Elem& e2) {
@@ -25,3 +30,5 @@ void sort(Elem* elemArr, int size) {
 		mySwap<Elem>(elemArr[i], *pMinElem);
 	}
 }
+
+#endif
