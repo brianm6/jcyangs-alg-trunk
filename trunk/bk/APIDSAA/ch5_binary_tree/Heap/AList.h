@@ -168,14 +168,14 @@ public:
 		return subFind(elem, 0, size);
 	}
 
-	bool findMax(Elem& elem) {
+	bool peekMax(Elem& elem) {
 		if (size == 0)
 			return false;
 		elem = elemArr[size - 1];
 		return true;
 	}
 
-	bool findMin(Elem& elem) {
+	bool peekMin(Elem& elem) {
 		if (size == 0)
 			return false;
 		elem = elemArr[0];
