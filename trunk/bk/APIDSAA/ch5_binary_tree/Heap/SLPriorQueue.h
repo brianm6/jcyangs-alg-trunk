@@ -8,6 +8,7 @@
 #include "IPriorityQueue.h"
 #include "AList.h"
 #include "SLList.h"
+#include "Heap.h"
 
 template<class Elem, class Prior>
 class ElemPrior {
@@ -54,7 +55,8 @@ class SLPriorQueue : public IPriorityQueue<Elem, Prior> {
 private:
 	ElemPrior<Elem, Prior>* elemPriorArr;
 	// SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
-	SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
+	// SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
+	MaxHeap< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >* elemPriorList;
 	int size;
 	int maxsize;
 public:
@@ -69,7 +71,8 @@ public:
 			elemPriorArr[i] = tmpElemPrior;
 		}
 		// elemPriorList = new SAList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size, maxsize);
-		elemPriorList = new SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size);
+		// elemPriorList = new SSLList< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size);
+		elemPriorList = new MaxHeap< ElemPrior<Elem, Prior>, ElemPriorComp<Elem, Prior, PComp> >(elemPriorArr, size, maxsize);
 	}
 
 	bool insert(const Elem elem, const Prior prior) {

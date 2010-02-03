@@ -2,25 +2,11 @@
 // Objective: provide the generic interface for binary search tree
 // Author: jcyang[at]ymail.com
 // Date: 27.Jan.2010
+
 #include <iostream>
+#include "BinNode.h"
 using namespace std;
 
-
-template<class Elem>
-class BinNode {
-public:
-	Elem value;
-	BinNode* rchild;
-	BinNode* lchild;
-	BinNode(const Elem& value, BinNode* lchild, BinNode* rchild) {
-		this->value = value;
-		this->lchild = lchild;
-		this->rchild = rchild;
-	}
-	bool isLeaf() {
-		return (this->lchild == NULL && this->rchild == NULL);
-	}
-};
 
 template<class Elem>
 void deleteMin(BinNode<Elem>* subroot, Elem& elem) {

@@ -31,4 +31,17 @@ void sort(Elem* elemArr, int size) {
 	}
 }
 
+template<class Elem, class EComp>
+void dsort(Elem* elemArr, int size) {
+	int i;
+	for (i = 0; i < size; i++) {
+		Elem* pMinElem = &elemArr[i];
+		for (int j = i + 1; j < size; j++) {
+			if (EComp::gt(elemArr[j], *pMinElem)) 
+				pMinElem = &elemArr[j];
+		}
+		mySwap<Elem>(elemArr[i], *pMinElem);
+	}
+}
+
 #endif

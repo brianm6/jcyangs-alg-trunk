@@ -70,6 +70,7 @@ int main() {
 
 	// remove next job
 	slPriorQueue.show();
+	cout << endl;
 	slPriorQueue.getNext(nextJob);
 	cout << "+ remove next job = " << nextJob << endl;
 	slPriorQueue.show();
