@@ -10,7 +10,7 @@ public:
 	Elem value;
 	BinNode* rchild;
 	BinNode* lchild;
-	BinNode(const Elem& value, BinNode* lchild, BinNode* rchild) {
+	BinNode(const Elem value, BinNode* lchild, BinNode* rchild) {
 		this->value = value;
 		this->lchild = lchild;
 		this->rchild = rchild;
@@ -19,4 +19,3 @@ public:
 		return (this->lchild == NULL && this->rchild == NULL);
 	}
 };
-
