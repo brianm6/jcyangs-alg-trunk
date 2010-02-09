@@ -37,6 +37,7 @@ class HuffmanTree {
 protected:
 	BinNode<CharWeight>* root;
 	uchar* charset;
+	uchar* charpos;
 	uint size;
 	BitSet** tbCode;
 	uint* tbLen;
@@ -45,8 +46,8 @@ protected:
 		static string code;
 		
 		if (subroot->isLeaf()) {
-			tbCode[subroot->value.ch] = new BitSet(code);
-			tbLen[subroot->value.ch] = code.length(); 
+			tbCode[charpos[subroot->value.ch]] = new BitSet(code);
+			tbLen[charpos[subroot->value.ch]] = code.length(); 
 			return ;
 		}
 		if (subroot->lchild != NULL) {
@@ -62,9 +63,8 @@ protected:
 	}
 
 	void buildTable() {
-		static const int charset_size = 256;
-		tbCode = new BitSet*[charset_size];
-		tbLen = new uint[charset_size];
+		tbCode = new BitSet*[size];
+		tbLen = new uint[size];
 
 		for (uint i = 0; i < size; i++) {
 			tbCode[i] = NULL;
@@ -88,8 +88,12 @@ public:
 	HuffmanTree(const uchar* charset, const uint* weight, const uint size) {
 		this->charset = new uchar[size];
 		this->size = size;
-		for (uint i = 0; i < size; i++)
+		charpos = new uchar[256];
+
+		for (uint i = 0; i < size; i++) {
 			this->charset[i] = charset[i];
+			charpos[charset[i]] = i;
+		}
 
 		buildHuffmanTree(charset, weight, size);
 	}
@@ -101,8 +105,11 @@ public:
 
 		this->charset = new uchar[aSize];
 		this->size = aSize;
-		for (uint i = 0; i < aSize; i++) 
+		charpos = new uchar[256];
+		for (uint i = 0; i < aSize; i++)  {
 			this->charset[i] = aCharset[i];
+			charpos[charset[i]] = i;
+		}
 
 		buildHuffmanTree(aCharset, aWeight, aSize);
 	}
@@ -161,9 +168,10 @@ public:
 	}
 
 	void showCodeTb() {
-		for (uint i = 0; i < size; i++) 
-			cout << i << setw(5) << charset[i] << " :   " << tbCode[charset[i]] << 
-									setw(10) << tbLen[charset[i]] << endl;
+		for (uint i = 0; i < size; i++) {
+			cout <<  i << setw(5) << charset[i] << " :   " << tbCode[charpos[charset[i]]] << 
+									setw(10) << tbLen[charpos[charset[i]]] << endl;
+		}
 	}
 
 	BitSet** getCodeTable() {

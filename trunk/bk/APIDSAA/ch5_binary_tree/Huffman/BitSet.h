@@ -32,33 +32,7 @@ public:
 		length = bitlen;
 		uint bytelen = (uint)ceil((double)bitlen / 8);
 		data = new uchar[bytelen];
-		memset(data, 0, sizeof(uint) * bytelen);
-	}
-
-	BitSet(std::string bitstr, bool debug) {
-		cout << "BEGIN " << endl;
-		length = bitstr.length();
-		cout << length << endl;
-		cout << bitstr << endl;
-		cout << "before abc " << endl;
-		string abc(bitstr);
-		cout << "abc = " << abc[0] << endl;
-		cout << bitstr[1] << endl;
-		// cout << bitstr.at[0] << endl;
-		cout << bitstr[0] << endl;
-
-		uint bytelen = (uint)ceil((double)(length / 8));
-		cout << bytelen << endl;
-
-		data = new uchar[bytelen];
-		cout << (int)data << endl;
-
-		for (uint i = 0; i < length; i++)  {
-			cout << "before access bitstr " << endl;
-			cout << bitstr[i];
-			cout << "after access bitstr " << endl;
-			set(length - 1 - i, bitstr[i] - '0');
-		}
+		memset(data, 0, sizeof(uchar) * bytelen);
 	}
 
 	BitSet(std::string bitstr) {
@@ -66,7 +40,7 @@ public:
 		uint bytelen = (uint)ceil((double)length / 8);
 		data = new uchar[bytelen];
 		for (uint i = 0; i < length; i++) 
-			set(length - 1 - i, bitstr[i] - '0');
+			set(i, bitstr[i] - '0');
 	}
 
 	BitSet(std::string bitstr, uint bitlen) {
@@ -74,10 +48,10 @@ public:
 		uint bytelen = (uint)ceil((double)length / 8);
 		data = new uchar[bytelen];
 		for (uint i = 0; i < bitlen; i++)
-			set(bitlen - 1 - i, bitstr[i] - '0');
+			set(i, bitstr[i] - '0');
 	}
 
-	int get(uint index) {
+	int get(uint index) const {
 		uchar* tbyte = data + index / 8;
 		uint bitpos = index % 8; 
 		return ( ( ( *tbyte >> bitpos ) & 0x01 ) != 0 ); // little endian
@@ -98,13 +72,25 @@ public:
 		return true;
 	}
 	
-	uint getLength() {
+	uint getLength() const {
 		return length;
 	}
 
-	std::string toString() {
+	bool equal(const BitSet& bitset) {
+		uint len = bitset.getLength();
+		if (len != length) 
+			return false;
+
+		for (int i = 0; i < len; i++) 
+			if (bitset.get(i) != get(i))
+				return false;
+
+		return true;
+	}
+
+	std::string toString() const {
 		std::string str;
-		for (int i = length - 1; i >= 0; i--)
+		for (int i = 0; i < length; ++i)
 			str += (char)(this->get((uint)i) + '0');
 		return str;
 	}

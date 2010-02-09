@@ -15,14 +15,6 @@
 #include "hType.h"
 
 class BitWrap {
-	friend std::ostream& operator<< ( std::ostream& out, BitSet bits ) {
-		out << bits.toString();
-		return out;
-	}
-	friend std::ostream& operator<< ( std::ostream& out, BitSet* bits ) {
-		out << bits->toString();
-		return out;
-	}
 private:
 	uchar* data;
 public:
@@ -30,13 +22,17 @@ public:
 		data = startaddr;
 	}
 
-	int get(uint index) {
+	void reset(uchar* startaddr) {
+		data = startaddr;
+	}
+
+	int get(uint64_t index) {
 		uchar* tbyte = data + index / 8;
 		uint bitpos = index % 8; 
 		return ( ( ( *tbyte >> bitpos ) & 0x01 ) != 0 ); // little endian
 	}
 
-	bool set(uint index, int value) {
+	bool set(uint64_t index, int value) {
 		if (value != 0 && value != 1)
 			return false;
 
@@ -51,6 +47,22 @@ public:
 		return true;
 	}
 	
+	bool set(uint64_t index, BitSet bitset) {
+		uint bitsetLen = bitset.getLength();
+		if (bitsetLen == 0)
+			return false;
+		for (uint i = 0; i < bitsetLen; i++)
+			if (!set(index++, bitset.get(i))) 
+				return false;
+		return true;
+	}
+
+	BitSet* getBitSet(uint64_t index, uint len) {
+		BitSet* bitset = new BitSet(len);
+		for (uint i = 0; i < len; i++) 
+			bitset->set(i, get(index++));
+		return bitset;
+	}
 };
 
 #endif
