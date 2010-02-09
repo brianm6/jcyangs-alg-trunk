@@ -6,7 +6,7 @@
 
 #include <windows.h>
 
-LPCTSTR getErrMsg() {
+LPCTSTR GetErrMsg() {
 	DWORD dwErr = GetLastError();
 	LPTSTR lpErrMsg;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
