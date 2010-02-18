@@ -18,11 +18,15 @@ LPCTSTR hwGetFileName(LPCTSTR lpFilePath) {
 
 	while (((long)dwStartPos >= 0) && (lpFilePath[dwStartPos--] != TEXT('\\')));
 	++dwStartPos; 
-	DWORD dwFileNameLen = dwEndPos - dwStartPos + 2;
+	DWORD dwFileNameLen = dwEndPos - dwStartPos + 1;
 	LPTSTR lpFileName = new TCHAR[dwFileNameLen];
 	for (DWORD pos = dwStartPos; pos <= dwEndPos; ++pos) 
 		lpFileName[pos - dwStartPos] = lpFilePath[pos];
-	lpFileName[dwFileNameLen] = TEXT('0');
+#ifdef _UNICODE
+	lpFileName[dwFileNameLen] = 0x0000;
+#else
+	lpFileName[dwFileNameLen] = 0x00;
+#endif
 	return lpFileName;
 }
 

@@ -51,7 +51,7 @@ int main()
 	tree.showCodeTb();
 	cout << endl;
 
-	HuffmanTree tree2;
+	HuffmanTree tree2(true);
 	cout << "+ The Default huffman alpha coding tree is : " << endl;
 	tree2.travesal(); 
 	cout << endl << "+ The default huffman coding table is " << endl;
