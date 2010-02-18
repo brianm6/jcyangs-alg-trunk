@@ -12,6 +12,7 @@
 #include <string>
 #include <cmath>
 #include <cstring>
+#include <stdint.h>
 #include "hType.h"
 
 class BitWrap {

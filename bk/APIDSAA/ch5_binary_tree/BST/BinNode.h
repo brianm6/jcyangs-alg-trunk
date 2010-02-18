@@ -4,6 +4,8 @@
 // Date: 3.Feb.2010
 // Revision: alpha
 
+#ifndef __BINNODE__
+#define __BINNODE__
 template<class Elem>
 class BinNode {
 public:
@@ -19,3 +21,4 @@ public:
 		return (this->lchild == NULL && this->rchild == NULL);
 	}
 };
+#endif

@@ -1,16 +1,15 @@
-/// Module Name: HuffmanTree.h
-// Objective: provide the generic huffman coding tree implementation
+// Module Name: EncodeHuffmanTree.h
+// Objective: provide the huffman encoding tree implementation
 // Author: jcyang[at]ymail.com
-// Date: 3.Feb.2010
+// Date: 11.Feb.2010
 // Revision: alpha
 
-#ifndef __GENERIC_HUFFMANTREE__
-#define __GENERIC_HUFFMANTREE__
+#ifndef __ENCODE_HUFFMAN_TREE__
+#define __ENCODE_HUFFMAN_TREE__
 
 #include <iostream>
 #include <iomanip>
-#include <cstdio>
-#include <stdint.h>
+#include <vector>
 #include "hType.h"
 #include "..\BST\BinNode.h"
 #include "..\Heap\Sort.h"
@@ -33,7 +32,7 @@ public:
 	}
 };
 
-class HuffmanTree {
+class EncodeHuffmanTree {
 protected:
 	BinNode<CharWeight>* root;
 	uchar* charset;
@@ -41,8 +40,8 @@ protected:
 	uint size;
 	BitSet** tbCode;
 	uint* tbLen;
-	string repstr;
-
+	vector<uchar> repStr;
+	
 	void subBuildTable(BinNode<CharWeight>* subroot) {
 		static string code;
 		
@@ -73,39 +72,47 @@ protected:
 		}
 		subBuildTable(root);
 	}
+	
+    void subTravesal(BinNode<CharWeight>* subroot) {
+        if (!subroot->isLeaf()) 
+            cout << " " << setw(20) << subroot->value.weight << endl;
+        else
+            cout << (uint)subroot->value.ch << setw(5) << subroot->value.ch << setw(20) << subroot->value.weight << endl;  
+        if (subroot->lchild != NULL) 
+            subTravesal(subroot->lchild);
+        if (subroot->rchild != NULL)
+            subTravesal(subroot->rchild);
+    }
 
-	void subTravesal(BinNode<CharWeight>* subroot) {
+	void subShowTree(BinNode<CharWeight>* subroot) {
 		if (subroot->isLeaf()) 
-			cout << " " << setw(20) << subroot->value.weight << endl;
-		else
-			cout << (uint)subroot->value.ch << setw(5) << subroot->value.ch << setw(20) << subroot->value.weight << endl;  
-		if (subroot->lchild != NULL) 
-			subTravesal(subroot->lchild);
-		if (subroot->rchild != NULL)
-			subTravesal(subroot->rchild);
+			// cout << (int)subroot->value << setw(5) << subroot->value << "   ";
+			cout << (int)subroot->value.ch << " ";
+		else {
+			cout << '|';
+			subShowTree(subroot->lchild);
+			subShowTree(subroot->rchild);
+		}
 	}
 
 	void subSerialize(BinNode<CharWeight>* subroot) {
-		static const string branchNode = "\x00\x00";
 		if (subroot->isLeaf())  {
-			repstr += subroot->value.ch;
+			if (subroot->value.ch == 0) {
+				repStr.push_back(0xff);
+				repStr.push_back(subroot->value.ch);
+				repStr.push_back(0xff);
+			} else
+				repStr.push_back(subroot->value.ch);
 			return ;
 		} else {
-			repstr += branchNode;
+			repStr.push_back(0);
 			subSerialize(subroot->lchild);
 			subSerialize(subroot->rchild);
 		}
 	}
-
-	BinNode<uchar>* subDeSerialize(const char* repstr) {
-		if (repstr[1] == 0 && repstr[2] == 0) 
-			return new BinNode<uchar>(0, subDeSerialize(&repstr[3]), subDeSerialize(&repstr[4]));
-		else 
-			return new BinNode<uchar>(*repstr, NULL, NULL);
-	}
-
+	
 public:
-	HuffmanTree(const uchar* charset, const uint* weight, const uint size) {
+	EncodeHuffmanTree(const uchar* charset, const uint* weight, const uint size) {
 		this->charset = new uchar[size];
 		this->size = size;
 		charpos = new uchar[256];
@@ -117,24 +124,7 @@ public:
 
 		buildHuffmanTree(charset, weight, size);
 	}
-
-	HuffmanTree() { }
-	HuffmanTree(bool isdefault) {
-		static const uint aSize = 26;
-		static const uchar aCharset[aSize] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-		static const uint aWeight[aSize] = { 81, 14, 27, 42, 127, 22, 20, 61, 70, 2, 8, 40, 24, 67, 74, 19, 1, 60, 63, 91, 28, 10, 24, 2, 20, 1 };
-
-		this->charset = new uchar[aSize];
-		this->size = aSize;
-		charpos = new uchar[256];
-		for (uint i = 0; i < aSize; i++)  {
-			this->charset[i] = aCharset[i];
-			charpos[charset[i]] = i;
-		}
-
-		buildHuffmanTree(aCharset, aWeight, aSize);
-	}
-
+	
 	void buildHuffmanTree(const uchar* charset, const uint* weight, const uint size) {
 		BinNode<CharWeight>** sortArr;
 		
@@ -165,6 +155,9 @@ public:
 
 		// build the code and length table
 		buildTable();
+		
+		// prepare the serialize object
+		subSerialize(root);
 	}
 	
 	BitSet* getCode(const uchar ch) {
@@ -180,12 +173,28 @@ public:
 		return getLen(ch);
 	}
 
-	void travesal() {
+	BitSet** getCodeTb() {
+		return tbCode;
+	}
+
+	uint* getLenTb() {
+		return tbLen;
+	}
+	
+	vector<uchar> serialize() {
+		return repStr;
+	}	
+	
+		void travesal() {
 		subTravesal(root);
 	}
 	
 	void show() {
 		travesal();
+	}
+
+	void showTree() {
+		subShowTree(root);
 	}
 
 	void showCodeTb() {
@@ -194,18 +203,6 @@ public:
 									setw(10) << tbLen[charpos[charset[i]]] << endl;
 		}
 	}
-
-	BitSet** getCodeTable() {
-		return tbCode;
-	}
-
-	uint* getLenTable() {
-		return tbLen;
-	}
-	
-	string serialize() {
-		return repstr;
-	}	
 };
 
 #endif
